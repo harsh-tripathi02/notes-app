@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-backend
+  labels:
+    app: notes-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notes-backend
+  template:
+    metadata:
+      labels:
+        app: notes-backend
+    spec:
+      containers:
+      - name: notes-backend
+        image: harshtripathi02/notes-server
+        ports:
+        - containerPort: 3000
+        env:
+        - name: dbURL
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: dbURL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes-backend
+spec:
+  selector:
+    app: notes-backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: harshtripathi02/notes-frontend
+    container_name: notes-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+
+  server:
+    image: harshtripathi02/notes-server
+    container_name: notes-server
+    ports:
+      - "3000:3000"
+
+networks:
+  default:
+    external:
+      name: mern-app
